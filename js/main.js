@@ -17,40 +17,34 @@ function saveBookmark(e){
     var bookmarks = [];
     bookmarks.push(bookmark);
     // set to localStorage
-    localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+    setBookmarks(bookmarks);
   } else {
-    var bookmarks = JSON.parse(localStorage.getItem('bookmarks'));
+    var bookmarks = getBookmarks();
     bookmarks.push(bookmark);
     // re-set to localStorage
-    localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+    setBookmarks(bookmarks);
   }
 
   fetchBookmarks();
-
-
-  console.log(bookmark);
 }
 
 // delete bookmarks
 function deleteBookmark(url){
-  var bookmarks = JSON.parse(localStorage.getItem('bookmarks'));
+  var bookmarks = getBookmarks();
   for(var i = 0; i < bookmarks.length; i++){
     if(bookmarks[i].url == url){
       bookmarks.splice(i, 1);
     }
   }
 
-  localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
-
+  setBookmarks(bookmarks);
   fetchBookmarks();
-
 }
 
 
 // fetch bookmarks
 function fetchBookmarks(){
-  var bookmarks = JSON.parse(localStorage.getItem('bookmarks'));
-  console.log(bookmarks);
+  var bookmarks = getBookmarks();
 
   // get bookmarksResults div element
   var bookmarksResults = document.getElementById('bookmarksResults');
@@ -63,13 +57,21 @@ function fetchBookmarks(){
 
     bookmarksResults.innerHTML += '<div class="media text-muted pt-3">'+
                                   '<div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">'+
-                                  '<div class="d-flex justify-content-between align-items-center w-100">'+
-                                  '<a class="btn btn-default" target="_blank" href="'+url+'">'+name+' '+
+                                  '<h5 class="d-flex justify-content-between align-items-center w-100">'+name+
+                                  '<a class="btn btn-default" target="_blank" href="'+url+'">'+url+' '+
                                   '<i class="fas fa-external-link-alt"></i>'+'</a>'+
                                   '<a onclick="deleteBookmark(\''+url+'\')" class="btn btn-danger" href="#">Delete</a>'+
-                                  '</div>'+
+                                  '</h5>'+
                                   '</div>'+
                                   '</div>'
 
   }
+}
+
+function setBookmarks(bookmarks){
+  localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+}
+
+function getBookmarks(){
+  return JSON.parse(localStorage.getItem('bookmarks'))
 }
