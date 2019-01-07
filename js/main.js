@@ -63,7 +63,7 @@ function fetchBookmarks(){
     var name = bookmarks[i].name;
     var url = bookmarks[i].url;
 
-    bookmarksResults.innerHTML += '<div class="media text-muted pt-3">'+
+    bookmarksResults.innerHTML += '<div id="searchBookmarks" class="media text-muted pt-3">'+
                                   '<div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">'+
                                   '<h5 class="d-flex justify-content-between align-items-center w-100">'+name+
                                   '<a class="btn btn-default" target="_blank" href="'+url+'">'+url+' '+
@@ -81,7 +81,7 @@ function setBookmarks(bookmarks){
 }
 
 function getBookmarks(){
-  return JSON.parse(localStorage.getItem('bookmarks'))
+  return JSON.parse(localStorage.getItem('bookmarks'));
 }
 
 function validateForm(siteName, siteUrl){
@@ -99,4 +99,31 @@ function validateForm(siteName, siteUrl){
   }
 
   return true;
+}
+
+// adding filter
+// get filter input element
+let filterInput = document.getElementById('filterInput');
+
+filterInput.addEventListener('keyup', filterNames);
+
+function filterNames(){
+  // get value of input
+  let filterValue = document.getElementById('filterInput').value.toUpperCase();
+
+  // get bookmarks
+  var div = document.getElementById('bookmarksResults');
+  var bookmarks = div.querySelectorAll('#searchBookmarks');
+
+  // loop through bookmarks
+  for(var i = 0; i < bookmarks.length; i++){
+    var name = bookmarks[i].firstChild.firstChild.firstChild.nodeValue;
+
+    // if find match    
+    if(name.toUpperCase().indexOf(filterValue) > -1){
+      bookmarks[i].style.display = '';
+    } else {
+      bookmarks[i].style.display = 'none';
+    }
+  }
 }
